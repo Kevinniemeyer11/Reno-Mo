@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Reno Mo's Wild Night</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  background: #0a0010;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  /* Safe area for iPhone notch */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Scanlines */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px);
+  pointer-events: none;
+  z-index: 999;
+}
+
+#gameWrapper {
+  position: relative;
+  border: 3px solid #ff00ff;
+  box-shadow: 0 0 20px #ff00ff, 0 0 40px #8800ff, inset 0 0 20px rgba(255,0,255,0.05);
+  flex-shrink: 0;
+}
+
+canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ── D-PAD ── */
+#dpad {
+  display: none;
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 10px auto 0;
+  flex-shrink: 0;
+}
+
+#dpad button {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  background: rgba(255,0,255,0.15);
+  border: 2px solid rgba(255,0,255,0.5);
+  color: #ff88ff;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.1s;
+  /* Prevent context menu on long press */
+  -webkit-touch-callout: none;
+}
+#dpad button:active,
+#dpad button.pressed {
+  background: rgba(255,0,255,0.5);
+  box-shadow: 0 0 12px #ff00ff;
+}
+
+#btn-up    { top: 0;   left: 52px; }
+#btn-down  { bottom: 0; left: 52px; }
+#btn-left  { top: 52px; left: 0; }
+#btn-right { top: 52px; right: 0; }
+#btn-center {
+  top: 52px; left: 52px;
+  background: rgba(255,0,255,0.08);
+  border-color: rgba(255,0,255,0.2);
+  font-size: 12px;
+  color: #8844aa;
+}
+
+@media (pointer: coarse) {
+  #dpad { display: block; }
+}
+
+#ui {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 6px 10px;
+  pointer-events: none;
+  font-size: 6px;
+  text-shadow: 0 0 8px currentColor;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent);
+}
+
+.ui-block { display: flex; flex-direction: column; gap: 3px; }
+.ui-label { color: #ff88ff; }
+.ui-val { color: #fff; font-size: 7px; }
+.ui-drunk { color: #ffdd00; font-size: 6px; }
+.ui-power { color: #00ffff; }
+
+#overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 10;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.overlay-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(11px, 4vw, 22px);
+  color: #ff00ff;
+  text-shadow: 3px 3px #8800aa, 0 0 20px #ff00ff;
+  text-align: center;
+  line-height: 1.6;
+  animation: titlePulse 1.5s ease-in-out infinite alternate;
+}
+@keyframes titlePulse {
+  from { text-shadow: 3px 3px #8800aa, 0 0 20px #ff00ff; }
+  to   { text-shadow: 3px 3px #8800aa, 0 0 40px #ff00ff, 0 0 80px #8800ff; }
+}
+
+.overlay-sub {
+  font-family: 'VT323', monospace;
+  font-size: clamp(13px, 3.5vw, 20px);
+  color: #ccccff;
+  text-align: center;
+  line-height: 1.7;
+  max-width: 500px;
+}
+
+.overlay-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(8px, 2.5vw, 12px);
+  background: transparent;
+  border: 3px solid #ff00ff;
+  color: #ff00ff;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-shadow: 0 0 8px #ff00ff;
+  box-shadow: 0 0 15px #ff00ff44;
+  animation: btnBlink 1s step-end infinite;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+@keyframes btnBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+.overlay-btn:active {
+  background: #ff00ff33;
+  box-shadow: 0 0 30px #ff00ff;
+  transform: scale(0.97);
+}
+
+.controls-info {
+  font-family: 'VT323', monospace;
+  font-size: clamp(12px, 3vw, 15px);
+  color: #8888aa;
+  text-align: center;
+  line-height: 1.9;
+}
+
+.neon-pink { color: #ff44ff; }
+.neon-cyan { color: #00ffff; }
+.neon-yellow { color: #ffee00; }
+
+#msgBox {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.9);
+  border: 2px solid #ff00ff;
+  padding: 6px 12px;
+  font-size: 6px;
+  color: #ffaaff;
+  white-space: nowrap;
+  display: none;
+  z-index: 20;
+  text-shadow: 0 0 8px #ff00ff;
+  box-shadow: 0 0 20px #ff00ff44;
+  max-width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+</style>
+</head>
+<body>
+
+<div id="gameWrapper">
+  <canvas id="c" width="600" height="500"></canvas>
+
+  <div id="ui">
+    <div class="ui-block">
+      <span class="ui-label">SCORE</span>
+      <span class="ui-val" id="uiScore">0</span>
+    </div>
+    <div class="ui-block" style="align-items:center">
+      <span class="ui-label">DRUNKOMETER</span>
+      <span class="ui-drunk" id="uiDrunk">████████░░</span>
+    </div>
+    <div class="ui-block" style="align-items:flex-end">
+      <span class="ui-label">POWER</span>
+      <span class="ui-power" id="uiPower">★★★★★</span>
+    </div>
+  </div>
+
+  <div id="msgBox"></div>
+
+  <!-- START SCREEN -->
+  <div id="overlay">
+    <div class="overlay-title">RENO MO'S<br>WILD NIGHT</div>
+    <div class="overlay-sub">
+      <span class="neon-pink">🍶 Reno Mo</span> is loose on the streets of Reno!<br>
+      He's looking for <span class="neon-pink">goth girls 🖤</span> and <span class="neon-yellow">booze 🍺</span>...<br>
+      but <span class="neon-cyan">Jeff, Robbie & Reza 👦</span> are trying to drag him<br>
+      back to the hotel room!<br>
+      <span style="color:#ff8800">🧑‍🦰 Matt</span> is out there eating sushi with strippers.<br>
+      <span style="color:#ff4444">⚠️ A Shiba Inu awaits the horny...</span>
+    </div>
+    <button class="overlay-btn" id="startBtn" onclick="startGame()">▶ START NIGHT</button>
+    <div class="controls-info">
+      WASD / ARROWS or D-PAD to move<br>
+      Collect 🍺 for power • Avoid Jeff, Robbie & Reza<br>
+      Find Matt 🧑‍🦰 for vibes • Find the goth girl 🖤
+    </div>
+  </div>
+</div>
+
+<!-- Virtual D-Pad (shown on touch devices) -->
+<div id="dpad">
+  <button id="btn-up"    >▲</button>
+  <button id="btn-left"  >◀</button>
+  <button id="btn-center">✦</button>
+  <button id="btn-right" >▶</button>
+  <button id="btn-down"  >▼</button>
+</div>
+
+<script>
+// ─── RESPONSIVE CANVAS SCALING ─────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const GAME_W = 600, GAME_H = 500;
+canvas.width  = GAME_W;
+canvas.height = GAME_H;
+const W = GAME_W, H = GAME_H;
+
+function resizeGame() {
+  const wrapper   = document.getElementById('gameWrapper');
+  const dpad      = document.getElementById('dpad');
+  const isTouch   = window.matchMedia('(pointer: coarse)').matches;
+  const dpadH     = isTouch ? 170 : 0;
+  const safeTop   = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sat') || '0');
+  const safeBot   = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sab') || '0');
+
+  const maxW = window.innerWidth;
+  const maxH = window.innerHeight - dpadH - 8;
+  const scale = Math.min(maxW / GAME_W, maxH / GAME_H, 1);
+
+  const cw = Math.floor(GAME_W * scale);
+  const ch = Math.floor(GAME_H * scale);
+
+  wrapper.style.width  = cw + 'px';
+  wrapper.style.height = ch + 'px';
+  canvas.style.width   = cw + 'px';
+  canvas.style.height  = ch + 'px';
+}
+
+window.addEventListener('resize', resizeGame);
+window.addEventListener('orientationchange', () => setTimeout(resizeGame, 200));
+resizeGame();
+
+// ─── TOUCH / D-PAD CONTROLS ────────────────────────────────────────────────
+const touchKeys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+
+function bindDpadBtn(id, key) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  const press   = e => { e.preventDefault(); touchKeys[key] = true;  btn.classList.add('pressed'); };
+  const release = e => { e.preventDefault(); touchKeys[key] = false; btn.classList.remove('pressed'); };
+  btn.addEventListener('touchstart',  press,   { passive: false });
+  btn.addEventListener('touchend',    release, { passive: false });
+  btn.addEventListener('touchcancel', release, { passive: false });
+  // Also mouse for desktop testing
+  btn.addEventListener('mousedown',  press);
+  btn.addEventListener('mouseup',    release);
+  btn.addEventListener('mouseleave', release);
+}
+
+bindDpadBtn('btn-up',    'ArrowUp');
+bindDpadBtn('btn-down',  'ArrowDown');
+bindDpadBtn('btn-left',  'ArrowLeft');
+bindDpadBtn('btn-right', 'ArrowRight');
+
+// Joystick-style swipe on the canvas itself
+let touchOrigin = null;
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t = e.touches[0];
+  touchOrigin = { x: t.clientX, y: t.clientY };
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (!touchOrigin) return;
+  const t = e.touches[0];
+  const dx = t.clientX - touchOrigin.x;
+  const dy = t.clientY - touchOrigin.y;
+  const dead = 12;
+  touchKeys.ArrowLeft  = dx < -dead;
+  touchKeys.ArrowRight = dx >  dead;
+  touchKeys.ArrowUp    = dy < -dead;
+  touchKeys.ArrowDown  = dy >  dead;
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  e.preventDefault();
+  touchOrigin = null;
+  touchKeys.ArrowLeft = touchKeys.ArrowRight = touchKeys.ArrowUp = touchKeys.ArrowDown = false;
+}, { passive: false });
+
+// Prevent page scroll/zoom during gameplay
+document.addEventListener('touchmove', e => { if (state === 'playing') e.preventDefault(); }, { passive: false });
+document.addEventListener('gesturestart', e => e.preventDefault());
+
+
+// ─── TILE SYSTEM ───────────────────────────────────────────────────────────
+const TILE = 40;
+const COLS = W / TILE; // 15
+const ROWS = H / TILE; // 12.5
+
+// Street layout: 0=sidewalk, 1=road, 2=building
+const WORLD_MAP = [
+  [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+  [2,0,0,1,0,0,2,0,0,2,0,0,1,0,2],
+  [2,0,2,1,2,0,2,0,2,2,0,2,1,0,2],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [2,0,2,1,2,0,0,0,2,2,0,2,1,0,2],
+  [2,0,0,1,0,0,2,0,0,2,0,0,1,0,2],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [2,0,0,1,0,0,2,0,0,2,0,0,1,0,2],
+  [2,0,2,1,2,0,0,0,2,2,0,2,1,0,2],
+  [2,0,0,1,0,0,2,0,0,2,0,0,1,0,2],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+  [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+];
+
+function tileAt(x, y) {
+  const col = Math.floor(x / TILE);
+  const row = Math.floor(y / TILE);
+  if (row < 0 || row >= WORLD_MAP.length || col < 0 || col >= WORLD_MAP[0].length) return 2;
+  return WORLD_MAP[row][col];
+}
+
+function canWalk(x, y) {
+  return tileAt(x, y) !== 2;
+}
+
+// ─── EMOJI RENDERER ────────────────────────────────────────────────────────
+function drawEmoji(emoji, x, y, size=28) {
+  ctx.font = `${size}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, x, y);
+}
+
+// ─── GAME STATE ─────────────────────────────────────────────────────────────
+let state = 'start'; // 'playing', 'bonk', 'jail', 'caught'
+let player, friends, matt, boozItems, gothGirl, shiba;
+let score = 0, drunkLevel = 0.8, power = 5;
+let keys = {};
+let animFrame;
+let msgTimer = 0;
+let bonkAnim = 0;
+let jailAnim = 0;
+let gameTime = 0;
+
+const MESSAGES_DRUNK = [
+  "I LOVE RENO!!!",
+  "WHERE DA GOTH GIRLLLS AT",
+  "WOOOOOOO",
+  "*hiccup*",
+  "I'M FINE I'M FINE",
+  "FLOOR WHY ARE YOU MOVING",
+  "more booze pls",
+  "JEFF CANT CATCH ME",
+  "ROBBIE NO",
+  "REZA PUT ME DOWN",
+  "is that Matt with strippers??",
+  "SUSHI?? AT THIS HOUR??",
+];
+const MESSAGES_FOUND = [
+  "omg she's right there",
+  "she so goth omg",
+  "*staggers confidently*",
+];
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+function initGame() {
+  player = { x: 200, y: 160, vx: 0, vy: 0, speed: 2.5, wobble: 0, facing: 1 };
+  friends = [
+    { x: 80,  y: 160, speed: 1.1,  emoji: '🧑', name: 'Jeff',   wobblePhase: 0 },
+    { x: 520, y: 250, speed: 1.0,  emoji: '👦', name: 'Robbie', wobblePhase: 1 },
+    { x: 300, y: 420, speed: 1.15, emoji: '🧔', name: 'Reza',   wobblePhase: 2 },
+  ];
+  // Matt roams freely - not a chaser, just vibing with sushi & strippers
+  matt = {
+    x: 160, y: 380,
+    targetX: 160, targetY: 380,
+    speed: 0.8,
+    wanderTimer: 0,
+    emoji: '🧑‍🦰',
+    phase: 0,
+  };
+  boozItems = [];
+  spawnBooze(6);
+  // Goth girl hidden somewhere walkable
+  gothGirl = { x: 480, y: 280, visible: false, revealTimer: 0, collected: false };
+  shiba = null;
+  score = 0;
+  drunkLevel = 0.8;
+  power = 5;
+  gameTime = 0;
+  bonkAnim = 0;
+  jailAnim = 0;
+}
+
+function spawnBooze(n) {
+  const walkableSpots = [];
+  for (let r = 0; r < WORLD_MAP.length; r++) {
+    for (let c = 0; c < WORLD_MAP[0].length; c++) {
+      if (WORLD_MAP[r][c] === 1 || WORLD_MAP[r][c] === 0) {
+        walkableSpots.push({ x: c * TILE + TILE/2, y: r * TILE + TILE/2 });
+      }
+    }
+  }
+  for (let i = 0; i < n; i++) {
+    const s = walkableSpots[Math.floor(Math.random() * walkableSpots.length)];
+    boozItems.push({ x: s.x + (Math.random()-0.5)*20, y: s.y + (Math.random()-0.5)*20,
+      emoji: ['🍺','🍻','🍶','🥃','🍾'][Math.floor(Math.random()*5)],
+      bob: Math.random()*Math.PI*2 });
+  }
+}
+
+// ─── INPUT ─────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => { keys[e.key] = true; });
+document.addEventListener('keyup',   e => { keys[e.key] = false; });
+
+// ─── DRAWING ───────────────────────────────────────────────────────────────
+function drawWorld() {
+  for (let r = 0; r < WORLD_MAP.length; r++) {
+    for (let c = 0; c < WORLD_MAP[0].length; c++) {
+      const t = WORLD_MAP[r][c];
+      const x = c * TILE, y = r * TILE;
+      if (t === 2) {
+        // Building
+        ctx.fillStyle = '#1a0a2e';
+        ctx.fillRect(x, y, TILE, TILE);
+        ctx.fillStyle = '#2d1045';
+        ctx.fillRect(x+2, y+2, TILE-4, TILE-4);
+        // Neon window glow occasionally
+        if ((r*15+c) % 7 === 0) {
+          ctx.fillStyle = `rgba(255,0,200,0.15)`;
+          ctx.fillRect(x+8, y+8, TILE-16, TILE-16);
+          ctx.fillStyle = '#ff00cc44';
+          ctx.fillRect(x+10, y+10, TILE-20, TILE-20);
+        }
+        if ((r*15+c) % 11 === 0) {
+          ctx.fillStyle = `rgba(0,200,255,0.12)`;
+          ctx.fillRect(x+8, y+8, TILE-16, TILE-16);
+        }
+      } else if (t === 1) {
+        // Road
+        ctx.fillStyle = '#1c1c28';
+        ctx.fillRect(x, y, TILE, TILE);
+        // Dashes
+        if ((c + r) % 4 === 0) {
+          ctx.fillStyle = '#ffffff18';
+          ctx.fillRect(x + TILE/2 - 2, y + 4, 4, TILE - 8);
+        }
+      } else {
+        // Sidewalk
+        ctx.fillStyle = '#2a1a3e';
+        ctx.fillRect(x, y, TILE, TILE);
+        ctx.strokeStyle = '#3d2a55';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x+1, y+1, TILE-2, TILE-2);
+      }
+    }
+  }
+
+  // Neon signs on buildings
+  drawNeonSign(1*TILE+10, 0*TILE+8, 'CASINO', '#ff00ff');
+  drawNeonSign(10*TILE+5, 0*TILE+8, 'SLOTS', '#00ffff');
+  drawNeonSign(1*TILE+5,  7*TILE+8, 'BAR',   '#ffff00');
+  drawNeonSign(10*TILE+5, 7*TILE+8, 'HOTEL', '#ff4444');
+}
+
+function drawNeonSign(x, y, text, color) {
+  const t = Date.now() / 1000;
+  const flicker = Math.sin(t * 7 + x) > 0.95 ? 0.2 : 1;
+  ctx.globalAlpha = flicker;
+  ctx.font = '7px "Press Start 2P"';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = color;
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 8;
+  ctx.fillText(text, x, y);
+  ctx.shadowBlur = 0;
+  ctx.globalAlpha = 1;
+}
+
+function drawPlayer() {
+  const px = player.x, py = player.y;
+  const wobble = Math.sin(player.wobble) * 6 * (drunkLevel);
+  const lean = Math.sin(player.wobble * 0.5) * 0.3 * drunkLevel;
+
+  ctx.save();
+  ctx.translate(px, py);
+  ctx.rotate(lean * player.facing);
+
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.4)';
+  ctx.beginPath();
+  ctx.ellipse(0, 14, 14, 5, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  // Glow aura if powered up
+  if (power > 3) {
+    ctx.globalAlpha = 0.3;
+    ctx.shadowColor = '#00ffff';
+    ctx.shadowBlur = 20;
+  }
+
+  drawEmoji('🧑', wobble, 0, 32);
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+
+  // Stars if very drunk
+  if (drunkLevel > 0.6) {
+    const starCount = Math.floor(drunkLevel * 4);
+    for (let i = 0; i < starCount; i++) {
+      const a = (gameTime * 2 + i * Math.PI * 2 / starCount);
+      ctx.font = '10px serif';
+      ctx.fillText('⭐', Math.cos(a)*22, -20 + Math.sin(a)*8);
+    }
+  }
+  ctx.restore();
+}
+
+function drawFriends() {
+  friends.forEach(f => {
+    const dx = player.x - f.x, dy = player.y - f.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    // Wobble when close
+    const wb = dist < 100 ? Math.sin(gameTime*5 + f.wobblePhase)*4 : 0;
+    ctx.save();
+    ctx.translate(f.x + wb, f.y);
+    drawEmoji(f.emoji, 0, 0, 28);
+    // Speech bubble when close
+    if (dist < 120) {
+      const bubbles = {
+        'Jeff':   ['RENO STOP!', 'HOTEL NOW!', 'JEFF IS COMING', 'BRO PLS'],
+        'Robbie': ['ROBBIE SEES YOU!', 'GET BACK HERE!', 'RENO NO!!!', 'NOT AGAIN'],
+        'Reza':   ['REZA WILL CATCH U', 'THIS IS NOT OK', 'HOTEL IS NICE BRO', 'REZA BEGS YOU'],
+      };
+      const lines = bubbles[f.name] || ['GET BACK HERE!'];
+      ctx.font = '5px "Press Start 2P"';
+      const msg = lines[Math.floor(gameTime * 0.5) % lines.length];
+      ctx.fillStyle = 'rgba(0,0,0,0.75)';
+      ctx.fillRect(-msg.length*3-4, -46, msg.length*6+8, 16);
+      ctx.fillStyle = '#ffff00';
+      ctx.textAlign = 'center';
+      ctx.fillText(msg, 0, -34);
+    }
+    ctx.restore();
+  });
+}
+
+function drawMatt() {
+  if (!matt) return;
+
+  // Matt wanders randomly, doesn't chase
+  matt.wanderTimer--;
+  if (matt.wanderTimer <= 0) {
+    matt.wanderTimer = 80 + Math.floor(Math.random() * 120);
+    // Pick a new random walkable destination
+    const walkable = [];
+    for (let r = 0; r < WORLD_MAP.length; r++)
+      for (let c = 0; c < WORLD_MAP[0].length; c++)
+        if (WORLD_MAP[r][c] !== 2) walkable.push({ x: c*TILE+TILE/2, y: r*TILE+TILE/2 });
+    const t = walkable[Math.floor(Math.random() * walkable.length)];
+    matt.targetX = t.x; matt.targetY = t.y;
+  }
+
+  const dx = matt.targetX - matt.x, dy = matt.targetY - matt.y;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  if (dist > 4) {
+    const nx = matt.x + (dx/dist) * matt.speed;
+    const ny = matt.y + (dy/dist) * matt.speed;
+    if (canWalk(nx, matt.y)) matt.x = nx;
+    if (canWalk(matt.x, ny)) matt.y = ny;
+  }
+
+  matt.phase += 0.06;
+  const bob = Math.sin(matt.phase) * 3;
+
+  ctx.save();
+  ctx.translate(matt.x, matt.y + bob);
+
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.beginPath();
+  ctx.ellipse(0, 16, 14, 5, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  drawEmoji('🧑‍🦰', 0, 0, 30); // Matt the ginger
+
+  // Sushi in one hand
+  const sushiAngle = Math.sin(matt.phase * 0.7) * 0.4;
+  ctx.save();
+  ctx.translate(16, 4);
+  ctx.rotate(sushiAngle);
+  drawEmoji('🍱', 0, 0, 18);
+  ctx.restore();
+
+  // Stripper on each arm (animated)
+  const s1x = -26 + Math.sin(matt.phase * 1.1) * 3;
+  const s2x =  26 + Math.sin(matt.phase * 0.9 + 1) * 3;
+  drawEmoji('💃', s1x, Math.sin(matt.phase*1.3)*4, 22);
+  drawEmoji('🕺', s2x, Math.sin(matt.phase*1.1+2)*4, 22);
+
+  // Name label
+  ctx.font = '6px "Press Start 2P"';
+  ctx.fillStyle = '#ff8800';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.shadowColor = '#ff8800';
+  ctx.shadowBlur = 6;
+  ctx.fillText('MATT', 0, -26);
+  ctx.shadowBlur = 0;
+
+  // Proximity quip when player is near
+  const pdx = player.x - matt.x, pdy = player.y - matt.y;
+  if (Math.sqrt(pdx*pdx + pdy*pdy) < 90) {
+    const quips = ['bro try the salmon 🍣','strippers love reno','I ordered 3 rolls','no cap this slaps'];
+    ctx.font = '5px "Press Start 2P"';
+    ctx.fillStyle = '#ffcc44';
+    ctx.shadowColor = '#ff8800';
+    ctx.shadowBlur = 4;
+    ctx.fillText(quips[Math.floor(gameTime * 0.4) % quips.length], 0, -40);
+    ctx.shadowBlur = 0;
+  }
+
+  ctx.restore();
+}
+
+function drawBooze() {
+  boozItems.forEach(b => {
+    b.bob += 0.05;
+    const bobY = Math.sin(b.bob) * 4;
+    drawEmoji(b.emoji, b.x, b.y + bobY, 22);
+    // Glow
+    ctx.save();
+    ctx.globalAlpha = 0.4 + Math.sin(b.bob)*0.2;
+    ctx.shadowColor = '#ffdd00';
+    ctx.shadowBlur = 12;
+    ctx.font = '22px serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(b.emoji, b.x, b.y + bobY);
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  });
+}
+
+function drawGothGirl() {
+  if (gothGirl.collected) return;
+  const g = gothGirl;
+
+  // Mysterious glow before reveal
+  if (!g.visible) {
+    // Show a subtle hint
+    const alpha = (Math.sin(gameTime * 2) * 0.5 + 0.5) * 0.3;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.shadowColor = '#8800ff';
+    ctx.shadowBlur = 30;
+    drawEmoji('🖤', g.x, g.y, 20);
+    ctx.shadowBlur = 0;
+    ctx.globalAlpha = 1;
+    ctx.restore();
+    return;
+  }
+
+  // Visible goth girl
+  const pulse = Math.sin(gameTime * 3) * 4;
+  ctx.save();
+  ctx.translate(g.x, g.y);
+  // Aura
+  ctx.globalAlpha = 0.3;
+  ctx.shadowColor = '#cc00ff';
+  ctx.shadowBlur = 40;
+  drawEmoji('🧛‍♀️', 0, pulse, 44);
+  ctx.globalAlpha = 1;
+  ctx.shadowBlur = 0;
+  drawEmoji('🧛‍♀️', 0, pulse, 36);
+  // Label
+  ctx.font = '6px "Press Start 2P"';
+  ctx.fillStyle = '#ff88ff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.shadowColor = '#ff00ff';
+  ctx.shadowBlur = 6;
+  ctx.fillText('GOTH GIRL', 0, -24);
+  ctx.shadowBlur = 0;
+  ctx.restore();
+}
+
+function drawShiba() {
+  if (!shiba) return;
+  shiba.x += shiba.vx;
+  shiba.y += shiba.vy;
+  const spin = shiba.spinning ? shiba.angle : 0;
+  shiba.angle = (shiba.angle || 0) + 0.3;
+
+  ctx.save();
+  ctx.translate(shiba.x, shiba.y);
+  ctx.rotate(spin);
+  drawEmoji('🐕', 0, 0, 40);
+  // Bat
+  ctx.restore();
+  ctx.save();
+  ctx.translate(shiba.x + 15, shiba.y - 5);
+  ctx.rotate(Math.sin(gameTime * 8) * 0.5);
+  drawEmoji('🏏', 0, 0, 28);
+  ctx.restore();
+}
+
+function drawBonkEffect() {
+  if (bonkAnim <= 0) return;
+  const a = bonkAnim / 60;
+  ctx.save();
+  ctx.globalAlpha = a;
+  ctx.font = `${40 + (1-a)*30}px serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('💥 BONK! 💥', W/2, H/2 - 60);
+  ctx.font = `${16 + (1-a)*10}px "Press Start 2P"`;
+  ctx.fillStyle = '#ffff00';
+  ctx.shadowColor = '#ffff00';
+  ctx.shadowBlur = 20;
+  ctx.fillText('TOO HORNY!!', W/2, H/2);
+  ctx.shadowBlur = 0;
+  ctx.restore();
+  bonkAnim--;
+}
+
+// ─── UPDATE ────────────────────────────────────────────────────────────────
+function update() {
+  gameTime += 0.016;
+
+  // Player movement (keyboard + touch/dpad)
+  let mx = 0, my = 0;
+  if (keys['ArrowLeft']  || keys['a'] || keys['A'] || touchKeys.ArrowLeft)  mx -= 1;
+  if (keys['ArrowRight'] || keys['d'] || keys['D'] || touchKeys.ArrowRight) mx += 1;
+  if (keys['ArrowUp']    || keys['w'] || keys['W'] || touchKeys.ArrowUp)    my -= 1;
+  if (keys['ArrowDown']  || keys['s'] || keys['S'] || touchKeys.ArrowDown)  my += 1;
+
+  if (mx || my) {
+    const len = Math.sqrt(mx*mx + my*my);
+    mx /= len; my /= len;
+  }
+
+  // Drunk modifier
+  const drunkSpeed = player.speed * (0.6 + drunkLevel * 0.8);
+  const drunkWiggle = (Math.random()-0.5) * drunkLevel * 1.5;
+
+  const nx = player.x + mx * drunkSpeed + drunkWiggle;
+  const ny = player.y + my * drunkSpeed + drunkWiggle;
+
+  // Collision
+  const margin = 14;
+  if (canWalk(nx, player.y) && nx > margin && nx < W - margin) player.x = nx;
+  if (canWalk(player.x, ny) && ny > margin && ny < H - margin) player.y = ny;
+
+  if (mx !== 0) player.facing = mx > 0 ? 1 : -1;
+  if (mx || my) player.wobble += 0.15;
+
+  // Drunk decay over time
+  drunkLevel = Math.max(0.1, drunkLevel - 0.0003);
+
+  // Score accumulates
+  score += Math.floor(drunkLevel * 2);
+
+  // Booze collection
+  boozItems = boozItems.filter(b => {
+    const dx = player.x - b.x, dy = player.y - b.y;
+    if (Math.sqrt(dx*dx + dy*dy) < 24) {
+      drunkLevel = Math.min(1.0, drunkLevel + 0.12);
+      power = Math.min(5, power + 1);
+      score += 100;
+      showMsg(`+100 | ${['GULP!','CHEERS!','YUM!','SWIG!'][Math.floor(Math.random()*4)]}`);
+      if (Math.random() < 0.4) gothGirl.visible = true; // booze reveals goth girl
+      if (boozItems.length < 3) spawnBooze(3);
+      return false;
+    }
+    return true;
+  });
+
+  // Goth girl proximity
+  if (!gothGirl.collected) {
+    const dx = player.x - gothGirl.x, dy = player.y - gothGirl.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < 80) gothGirl.visible = true;
+    if (dist < 30 && gothGirl.visible) {
+      gothGirl.collected = true;
+      bonkAnim = 120;
+      state = 'bonk';
+      shiba = { x: -60, y: player.y, vx: 4, vy: 0, spinning: false, angle: 0 };
+      setTimeout(() => triggerJail(), 3000);
+    }
+  }
+
+  // Friends AI — chase player
+  friends.forEach(f => {
+    const dx = player.x - f.x, dy = player.y - f.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const speedMod = power > 0 ? 1 / (1 + power * 0.15) : 1; // power makes you faster relative to friends
+    if (dist > 10) {
+      const nx = f.x + (dx/dist) * f.speed * speedMod;
+      const ny = f.y + (dy/dist) * f.speed * speedMod;
+      if (canWalk(nx, f.y)) f.x = nx;
+      if (canWalk(f.x, ny)) f.y = ny;
+    }
+
+    // Caught!
+    if (dist < 22) {
+      state = 'caught';
+      cancelAnimationFrame(animFrame);
+      showEndScreen('caught');
+    }
+  });
+
+  // Power drain
+  if (gameTime % 5 < 0.02) power = Math.max(0, power - 1);
+
+  // Random drunk messages
+  if (Math.random() < 0.003) {
+    showMsg(MESSAGES_DRUNK[Math.floor(Math.random() * MESSAGES_DRUNK.length)]);
+  }
+
+  // Update UI
+  updateUI();
+}
+
+function updateUI() {
+  document.getElementById('uiScore').textContent = score;
+  const d = Math.round(drunkLevel * 10);
+  document.getElementById('uiDrunk').textContent = '█'.repeat(d) + '░'.repeat(10-d);
+  document.getElementById('uiPower').textContent = '★'.repeat(power) + '☆'.repeat(5-power);
+}
+
+// ─── MESSAGE POPUP ─────────────────────────────────────────────────────────
+let msgTimeout;
+function showMsg(text) {
+  const el = document.getElementById('msgBox');
+  el.textContent = text;
+  el.style.display = 'block';
+  clearTimeout(msgTimeout);
+  msgTimeout = setTimeout(() => el.style.display = 'none', 1800);
+}
+
+// ─── END SCREENS ───────────────────────────────────────────────────────────
+function triggerJail() {
+  state = 'jail';
+  cancelAnimationFrame(animFrame);
+  showEndScreen('jail');
+}
+
+function showEndScreen(type) {
+  const overlay = document.getElementById('overlay');
+  overlay.innerHTML = '';
+
+  if (type === 'jail') {
+    overlay.innerHTML = `
+      <div class="overlay-title" style="font-size:clamp(10px,2.5vw,18px)">🚔 HORNY JAIL 🚔</div>
+      <div style="font-size:60px; animation:titlePulse 1s ease infinite alternate">🐕🏏💥🧑</div>
+      <div class="overlay-sub">
+        The Shiba Inu appeared from the shadows.<br>
+        <span class="neon-pink">BONK.</span> Right on the head.<br><br>
+        Reno Mo has been sentenced to<br>
+        <span class="neon-yellow">HORNY JAIL</span> 🔒<br><br>
+        He will be released when he is<br>
+        <span class="neon-cyan">less horny.</span> (unknown ETA)<br><br>
+        Matt sent a sushi roll to his cell.<br>
+        <span style="color:#ff8800">True homie. 🍣</span>
+      </div>
+      <div class="overlay-sub" style="font-size:18px; color:#ffdd00">
+        FINAL SCORE: ${score}
+      </div>
+      <button class="overlay-btn" onclick="startGame()">▶ BAIL OUT & RETRY</button>
+    `;
+  } else if (type === 'caught') {
+    overlay.innerHTML = `
+      <div class="overlay-title" style="font-size:clamp(10px,2.5vw,16px)">DRAGGED TO THE HOTEL</div>
+      <div style="font-size:60px">👦😤🧑</div>
+      <div class="overlay-sub">
+        Jeff, Robbie, and Reza have<br>
+        <span class="neon-yellow">successfully</span> retrieved Reno Mo.<br><br>
+        He is now in Room 214 drinking<br>
+        complimentary water and watching<br>
+        <span class="neon-cyan">infomercials.</span><br><br>
+        Matt is still out there.<br>
+        <span style="color:#ff8800">Eating sushi. Unbothered. 🍣</span><br><br>
+        The goth girl remains unfound. 🖤
+      </div>
+      <div class="overlay-sub" style="font-size:18px; color:#ffdd00">
+        FINAL SCORE: ${score}
+      </div>
+      <button class="overlay-btn" onclick="startGame()">▶ ESCAPE ROOM & RETRY</button>
+    `;
+  }
+
+  overlay.style.display = 'flex';
+}
+
+// ─── GAME LOOP ─────────────────────────────────────────────────────────────
+function loop() {
+  ctx.clearRect(0, 0, W, H);
+
+  drawWorld();
+  drawMatt();
+  drawBooze();
+  drawGothGirl();
+  drawFriends();
+  drawPlayer();
+  drawShiba();
+
+  if (state === 'bonk') {
+    drawBonkEffect();
+    // Shiba charges in
+    if (shiba && shiba.x < player.x) {
+      shiba.x += 5;
+    }
+  }
+
+  if (state === 'playing' || state === 'bonk') update();
+
+  animFrame = requestAnimationFrame(loop);
+}
+
+// ─── START ─────────────────────────────────────────────────────────────────
+function startGame() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('msgBox').style.display = 'none';
+  initGame();
+  state = 'playing';
+  cancelAnimationFrame(animFrame);
+  resizeGame();
+  loop();
+  showMsg('🍶 RENO MO IS ON THE LOOSE!!');
+}
+
+// Initial loop just for title screen
+(function titleLoop() {
+  ctx.clearRect(0, 0, W, H);
+  drawWorld();
+  requestAnimationFrame(titleLoop);
+})();
+</script>
+</body>
+</html>
