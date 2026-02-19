@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEATFEST — 5th Annual</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Oswald:wght@700&family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white:   #FAFAF8;
+  --ivory:   #F5F0E8;
+  --paper:   #EDE5D8;
+  --red:     #9B1C1C;
+  --crimson: #B22222;
+  --dark:    #1A0A00;
+  --char:    #2C1A0E;
+  --brown:   #5C2E00;
+  --tan:     #C4955A;
+  --smoke:   #888070;
+  --bone:    #D4C8B0;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--white);
+  color: var(--dark);
+  font-family: 'Barlow Condensed', 'Oswald', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ─── TEXTURE OVERLAY ─── */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1000;
+  opacity:0.6;
+}
+
+/* ─── NAV ─── */
+nav {
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:500;
+  background: var(--dark);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:0;
+  border-bottom: 3px solid var(--red);
+}
+nav a {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.72rem;
+  letter-spacing:3px;
+  color:var(--bone);
+  text-decoration:none;
+  padding:15px 16px;
+  transition:color 0.2s, background 0.2s;
+  border-right:1px solid rgba(255,255,255,0.06);
+  text-transform:uppercase;
+}
+nav a:first-child{border-left:1px solid rgba(255,255,255,0.06);}
+nav a:hover{color:var(--white); background:var(--red);}
+
+/* ─── HERO ─── */
+.hero {
+  min-height:100vh;
+  background: var(--dark);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:100px 30px 70px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* charcoal texture bg */
+.hero::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 110%, rgba(155,28,28,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(92,46,0,0.4) 0%, transparent 60%);
+  z-index:1;
+}
+
+.hero-video {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0.28;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* big background MEATFEST text */
+.hero-bg-text {
+  z-index:2;
+  position:absolute;
+  font-family:'Black Han Sans',sans-serif;
+  font-size:clamp(6rem,18vw,17rem);
+  color:rgba(255,255,255,0.025);
+  letter-spacing:-10px;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
+}
+
+.hero-content { position:relative; z-index:3; }
+
+.hero-fifth {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:2rem;
+  letter-spacing:8px;
+  color:var(--tan);
+  margin-bottom:20px;
+  text-transform:uppercase;
+  animation: fadeUp 1s ease both;
+}
+
+.hero-logo {
+  width:min(460px,82vw);
+  height:auto;
+  filter: drop-shadow(0 0 60px rgba(155,28,28,0.6)) drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+  animation: fadeUp 1.2s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+  border-radius:8px;
+}
+
+.hero-ornament {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  justify-content:center;
+  margin:30px 0 22px;
+  animation: fadeUp 1s ease 0.3s both;
+}
+.hero-ornament-line { flex:1; max-width:120px; height:2px; background:linear-gradient(90deg, transparent, var(--red)); }
+.hero-ornament-line.right { background:linear-gradient(90deg, var(--red), transparent); }
+.hero-ornament-icon { font-size:1.6rem; filter:drop-shadow(0 0 8px rgba(155,28,28,0.8)); }
+
+.hero-desc {
+  font-size:clamp(1.1rem,2.2vw,1.4rem);
+  font-weight:700;
+  font-style:italic;
+  color:var(--bone);
+  max-width:660px;
+  line-height:1.7;
+  animation: fadeUp 1s ease 0.4s both;
+}
+.hero-desc strong { color:var(--tan); font-style:normal; }
+
+.hero-badges {
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin-top:32px;
+  flex-wrap:wrap;
+  animation: fadeUp 1s ease 0.55s both;
+}
+.hero-badge {
+  background:rgba(155,28,28,0.25);
+  border:2px solid var(--red);
+  color:var(--bone);
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.68rem;
+  letter-spacing:3px;
+  padding:8px 18px;
+  text-transform:uppercase;
+}
+
+/* ─── BBQ SVG GRAPHICS ─── */
+.bbq-divider {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  background:var(--dark);
+  padding:10px 0;
+  overflow:hidden;
+}
+.bbq-strip {
+  display:flex;
+  gap:28px;
+  align-items:center;
+  padding:10px 30px;
+  font-size:2rem;
+  filter:drop-shadow(0 2px 6px rgba(155,28,28,0.5));
+  animation: scrollLeft 18s linear infinite;
+  white-space:nowrap;
+}
+@keyframes scrollLeft {
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* section base */
+section { padding:80px 40px; }
+.container { max-width:1100px; margin:0 auto; }
+
+.s-label {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.68rem;
+  letter-spacing:6px;
+  color:var(--red);
+  text-align:center;
+  margin-bottom:8px;
+  text-transform:uppercase;
+}
+.s-title {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:clamp(2.4rem,7vw,5rem);
+  text-align:center;
+  color:var(--dark);
+  line-height:1;
+  margin-bottom:14px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+.s-divider {
+  width:80px;
+  height:4px;
+  background:var(--red);
+  margin:0 auto 50px;
+}
+
+/* ─── ABOUT ─── */
+.about { background:var(--ivory); position:relative; overflow:hidden; }
+.about::before {
+  content:'🔥';
+  position:absolute;
+  font-size:22rem;
+  opacity:0.03;
+  right:-60px;
+  bottom:-60px;
+  pointer-events:none;
+}
+
+.about-intro {
+  text-align:center;
+  font-size:clamp(1.2rem,2.5vw,1.55rem);
+  font-weight:700;
+  font-style:italic;
+  color:var(--char);
+  max-width:760px;
+  margin:0 auto 50px;
+  line-height:1.75;
+}
+.about-intro strong { color:var(--red); font-style:normal; }
+
+.about-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:3px;
+  background:var(--red);
+}
+.about-card {
+  background:var(--white);
+  padding:38px 26px;
+  text-align:center;
+  position:relative;
+  transition:background 0.25s, transform 0.25s;
+}
+.about-card:hover { background:var(--dark); }
+.about-card:hover h3 { color:var(--tan); }
+.about-card:hover p  { color:var(--bone); }
+.about-card-icon {
+  font-size:2.8rem;
+  margin-bottom:14px;
+  display:block;
+  filter:drop-shadow(0 2px 8px rgba(155,28,28,0.4));
+}
+.about-card h3 {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:1.2rem;
+  letter-spacing:2px;
+  color:var(--red);
+  margin-bottom:10px;
+  transition:color 0.25s;
+}
+.about-card p { font-size:1rem; color:#666; line-height:1.6; transition:color 0.25s; font-weight:700; }
+
+/* ─── COUNCIL (dark) ─── */
+.council { background:var(--dark); position:relative; overflow:hidden; }
+.council::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(155,28,28,0.2) 0%, transparent 70%);
+}
+.council .s-title { color:var(--white); }
+.council .s-label { color:var(--tan); }
+.council .s-divider { background:var(--tan); }
+
+.council-header-graphic {
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.council-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:3px;
+  background:rgba(255,255,255,0.05);
+  position:relative;
+  z-index:1;
+}
+.councilman {
+  background:rgba(26,10,0,0.9);
+  padding:40px 18px;
+  text-align:center;
+  border-top:3px solid transparent;
+  transition:all 0.3s;
+  position:relative;
+}
+.councilman:hover {
+  background:var(--red);
+  border-top-color:var(--tan);
+}
+.c-avatar {
+  width:70px; height:70px;
+  border-radius:50%;
+  background:var(--char);
+  border:3px solid var(--red);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2rem;
+  margin:0 auto 14px;
+  transition:border-color 0.3s;
+}
+.councilman:hover .c-avatar { border-color:var(--tan); background:rgba(0,0,0,0.3); }
+.c-name {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:1rem;
+  color:var(--white);
+  letter-spacing:1px;
+  margin-bottom:6px;
+  line-height:1.25;
+}
+.c-title {
+  font-size:0.82rem;
+  color:var(--tan);
+  font-style:italic;
+  font-weight:700;
+  line-height:1.3;
+}
+
+/* ─── AWARDS ─── */
+.awards { background:var(--ivory); }
+
+.mvc-block {
+  background:var(--dark);
+  color:var(--white);
+  padding:52px 48px;
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:36px;
+  align-items:center;
+  margin-bottom:4px;
+  position:relative;
+  overflow:hidden;
+  border-left:8px solid var(--red);
+}
+.mvc-block::before {
+  content:'MVC';
+  position:absolute;
+  right:-10px; top:-30px;
+  font-family:'Black Han Sans',sans-serif;
+  font-size:9rem;
+  color:rgba(155,28,28,0.12);
+  letter-spacing:-5px;
+  pointer-events:none;
+}
+.mvc-badge-circle {
+  width:140px; height:140px;
+  border-radius:50%;
+  background:radial-gradient(circle, var(--red), #6B0000);
+  border:4px solid var(--tan);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  box-shadow: 0 0 40px rgba(155,28,28,0.6);
+}
+.mvc-trophy-icon { font-size:3.2rem; line-height:1; }
+.mvc-badge-text {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.55rem;
+  letter-spacing:2px;
+  color:var(--tan);
+  margin-top:4px;
+}
+.mvc-eyebrow {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.65rem;
+  letter-spacing:5px;
+  color:var(--tan);
+  margin-bottom:8px;
+}
+.mvc-title-text {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:clamp(1.8rem,4vw,3.2rem);
+  color:var(--white);
+  letter-spacing:2px;
+  line-height:1;
+  margin-bottom:14px;
+  text-transform:uppercase;
+}
+.mvc-desc { font-size:1.05rem; font-weight:700; color:rgba(237,229,216,0.85); line-height:1.65; }
+
+.awards-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:3px;
+  background:rgba(155,28,28,0.12);
+}
+.award-card {
+  background:var(--white);
+  padding:28px 24px;
+  border-top:4px solid transparent;
+  transition:all 0.25s;
+}
+.award-card:hover { background:var(--dark); border-top-color:var(--red); }
+.award-card:hover .award-name { color:var(--tan); }
+.award-card:hover .award-desc { color:var(--bone); }
+.award-icon-big { font-size:2.2rem; margin-bottom:12px; display:block; }
+.award-name {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:1.1rem;
+  color:var(--red);
+  letter-spacing:1px;
+  margin-bottom:8px;
+  text-transform:uppercase;
+  transition:color 0.25s;
+}
+.award-desc { font-size:0.95rem; font-weight:700; color:#666; line-height:1.55; transition:color 0.25s; }
+
+/* ─── WEIGH-IN (red) ─── */
+.weighin {
+  background:var(--red);
+  color:var(--white);
+  position:relative;
+  overflow:hidden;
+}
+.weighin::before {
+  content:'⚖';
+  position:absolute;
+  font-size:30rem;
+  opacity:0.04;
+  right:-100px; bottom:-120px;
+  pointer-events:none;
+}
+.weighin .s-title { color:var(--white); }
+.weighin .s-label { color:var(--tan); }
+.weighin .s-divider { background:var(--tan); }
+
+.weighin-steps {
+  display:grid;
+  grid-template-columns:1fr 40px 1fr 40px 1fr;
+  gap:8px;
+  align-items:center;
+  max-width:860px;
+  margin:0 auto;
+}
+.w-step {
+  background:rgba(0,0,0,0.25);
+  border:2px solid rgba(255,255,255,0.15);
+  padding:32px 22px;
+  text-align:center;
+  position:relative;
+}
+.w-step-num {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:4rem;
+  color:rgba(255,255,255,0.15);
+  line-height:1;
+  position:absolute;
+  top:10px; left:14px;
+}
+.w-step-icon { font-size:2.5rem; margin-bottom:10px; display:block; }
+.w-step-title {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:1.3rem;
+  letter-spacing:2px;
+  margin-bottom:8px;
+  text-transform:uppercase;
+}
+.w-step p { font-size:0.95rem; font-weight:700; opacity:0.8; line-height:1.5; }
+.w-arrow {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:2rem;
+  color:rgba(255,255,255,0.3);
+  text-align:center;
+}
+.weighin-note {
+  text-align:center;
+  margin-top:40px;
+  font-size:0.9rem;
+  font-weight:700;
+  font-style:italic;
+  opacity:0.55;
+  max-width:520px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+/* ─── SCHEDULE ─── */
+.schedule { background:var(--white); }
+
+.timeline {
+  max-width:780px;
+  margin:0 auto;
+  position:relative;
+}
+.timeline::before {
+  content:'';
+  position:absolute;
+  left:158px;
+  top:0; bottom:0;
+  width:4px;
+  background:linear-gradient(180deg, var(--red), var(--brown), var(--red));
+}
+.tl-item {
+  display:grid;
+  grid-template-columns:145px 1fr;
+  gap:50px;
+  padding:26px 0;
+  border-bottom:1px solid rgba(155,28,28,0.1);
+  position:relative;
+  transition:background 0.2s;
+}
+.tl-item:hover { background:rgba(155,28,28,0.03); }
+.tl-item::before {
+  content:'';
+  position:absolute;
+  left:150px;
+  top:30px;
+  width:16px; height:16px;
+  border-radius:50%;
+  background:var(--red);
+  border:3px solid var(--white);
+  box-shadow:0 0 0 3px var(--red);
+  z-index:1;
+}
+.tl-time {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.9rem;
+  letter-spacing:1px;
+  color:var(--red);
+  text-align:right;
+  padding-top:4px;
+  padding-right:14px;
+  text-transform:uppercase;
+  line-height:1.4;
+}
+.tl-content h4 {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:1.15rem;
+  letter-spacing:2px;
+  color:var(--dark);
+  margin-bottom:4px;
+  text-transform:uppercase;
+}
+.tl-content p { font-size:0.97rem; font-weight:700; color:#777; line-height:1.5; }
+.tl-icon { font-size:1.4rem; margin-right:8px; vertical-align:middle; }
+
+/* ─── RULES ─── */
+.rules { background:var(--char); position:relative; overflow:hidden; }
+.rules::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(155,28,28,0.2) 0%, transparent 70%);
+}
+.rules .s-title { color:var(--white); }
+.rules .s-label { color:var(--tan); }
+.rules .s-divider { background:var(--tan); }
+
+.rules-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+  gap:3px;
+  background:rgba(255,255,255,0.04);
+  position:relative;
+  z-index:1;
+}
+.rule-card {
+  background:rgba(26,10,0,0.85);
+  padding:26px 28px;
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+  border-left:4px solid var(--red);
+  transition:background 0.25s, border-color 0.25s;
+}
+.rule-card:hover { background:rgba(155,28,28,0.18); border-color:var(--tan); }
+.rule-num {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:2.4rem;
+  color:rgba(155,28,28,0.5);
+  line-height:1;
+  flex-shrink:0;
+  width:40px;
+}
+.rule-text {
+  font-size:1rem;
+  font-weight:700;
+  color:var(--bone);
+  line-height:1.6;
+  padding-top:6px;
+}
+
+/* ─── GAME ─── */
+.game-section { background:var(--dark); padding:80px 40px; }
+.game-section .s-title { color:var(--white); }
+.game-section .s-label { color:var(--tan); }
+.game-section .s-divider { background:var(--tan); }
+
+#gameCanvas {
+  display:block;
+  margin:0 auto;
+  border:4px solid var(--red);
+  max-width:100%;
+  box-shadow:0 0 60px rgba(155,28,28,0.5);
+}
+
+.game-hud {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:3px;
+  max-width:700px;
+  margin:20px auto;
+  background:rgba(155,28,28,0.2);
+}
+.hud-cell {
+  background:rgba(26,10,0,0.9);
+  padding:14px;
+  text-align:center;
+  border:1px solid rgba(155,28,28,0.3);
+}
+.hud-label {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.6rem;
+  letter-spacing:3px;
+  color:var(--tan);
+  margin-bottom:4px;
+  text-transform:uppercase;
+}
+.hud-val {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:1.8rem;
+  color:var(--white);
+  line-height:1;
+}
+
+.game-btns { text-align:center; margin-top:18px; }
+.gbtn {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.85rem;
+  letter-spacing:4px;
+  padding:14px 36px;
+  border:3px solid var(--red);
+  background:var(--red);
+  color:var(--white);
+  cursor:pointer;
+  margin:4px;
+  text-transform:uppercase;
+  transition:all 0.2s;
+}
+.gbtn:hover { background:transparent; color:var(--tan); border-color:var(--tan); }
+.gbtn.outline { background:transparent; border-color:var(--tan); color:var(--tan); }
+.gbtn.outline:hover { background:var(--tan); color:var(--dark); }
+
+.game-help {
+  text-align:center;
+  color:rgba(196,149,90,0.5);
+  font-size:0.92rem;
+  font-weight:700;
+  font-style:italic;
+  margin-top:12px;
+}
+.game-help span { color:var(--tan); font-style:normal; }
+
+/* ─── FOOTER ─── */
+footer {
+  background:var(--dark);
+  border-top:4px solid var(--red);
+  text-align:center;
+  padding:60px 20px 40px;
+  color:rgba(212,200,176,0.35);
+}
+footer img {
+  width:140px;
+  height:auto;
+  margin-bottom:22px;
+  filter:brightness(0.9);
+  border-radius:6px;
+}
+footer .f-title {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:1.8rem;
+  letter-spacing:4px;
+  color:var(--bone);
+  margin-bottom:8px;
+  text-transform:uppercase;
+}
+footer p {
+  font-size:0.85rem;
+  font-weight:700;
+  line-height:1.8;
+}
+
+
+/* ─── MASCOT ─── */
+.mascot-block {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  max-width:900px;
+  margin:0 auto 0;
+  border:3px solid var(--red);
+  overflow:hidden;
+}
+.mascot-img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  display:block;
+  max-height:520px;
+}
+.mascot-text {
+  background:var(--dark);
+  padding:48px 38px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.mascot-label {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.65rem;
+  letter-spacing:5px;
+  color:var(--tan);
+  margin-bottom:12px;
+  text-transform:uppercase;
+}
+.mascot-title {
+  font-family:'Black Han Sans',sans-serif;
+  font-size:2.4rem;
+  color:var(--white);
+  line-height:1.1;
+  margin-bottom:18px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+.mascot-title span { color:var(--red); }
+.mascot-desc {
+  font-size:1.05rem;
+  font-weight:700;
+  color:var(--bone);
+  line-height:1.7;
+  font-style:italic;
+}
+.mascot-desc strong { color:var(--tan); font-style:normal; }
+@media(max-width:680px){
+  .mascot-block{grid-template-columns:1fr;}
+  .mascot-img{max-height:380px;}
+}
+
+
+.council-photo-wrap {
+  max-width:900px;
+  margin: 0 auto 50px;
+  position:relative;
+  z-index:1;
+}
+.council-photo {
+  width:100%;
+  display:block;
+  border:3px solid rgba(155,28,28,0.6);
+  filter: brightness(0.92) contrast(1.05);
+}
+.council-photo-caption {
+  background:var(--red);
+  padding:14px 24px;
+  text-align:center;
+  font-family:'Black Han Sans',sans-serif;
+  font-size:0.7rem;
+  letter-spacing:5px;
+  color:var(--tan);
+  text-transform:uppercase;
+}
+
+/* ─── BBQ GRAPHICS ─── */
+.bbq-scene {
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:40px;
+  padding:30px 0 0;
+  flex-wrap:wrap;
+}
+.grill-svg { filter:drop-shadow(0 8px 24px rgba(155,28,28,0.5)); }
+
+/* floating smoke */
+@keyframes smokeRise {
+  0%   {transform:translateY(0) scaleX(1);   opacity:0.6;}
+  50%  {transform:translateY(-30px) scaleX(1.3); opacity:0.3;}
+  100% {transform:translateY(-60px) scaleX(1.6); opacity:0;}
+}
+.smoke-puff {
+  animation:smokeRise 3s ease-out infinite;
+}
+.smoke-puff:nth-child(2){animation-delay:1s;}
+.smoke-puff:nth-child(3){animation-delay:2s;}
+
+@keyframes flicker {
+  0%,100%{transform:scaleY(1) scaleX(1);}
+  25%{transform:scaleY(1.08) scaleX(0.95);}
+  50%{transform:scaleY(0.95) scaleX(1.05);}
+  75%{transform:scaleY(1.05) scaleX(0.97);}
+}
+.flame-anim { animation:flicker 0.8s ease-in-out infinite; transform-origin:bottom center; }
+
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(28px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@media(max-width:720px){
+  nav a{font-size:0.6rem;padding:12px 8px;letter-spacing:1px;}
+  .mvc-block{grid-template-columns:1fr;text-align:center;padding:32px 24px;}
+  .mvc-badge-circle{margin:0 auto 20px;}
+  .weighin-steps{grid-template-columns:1fr;}
+  .w-arrow{transform:rotate(90deg);}
+  .timeline::before{left:80px;}
+  .timeline::before{left:100px;}
+  .tl-item{grid-template-columns:88px 1fr; gap:30px; padding:20px 0;}
+  .tl-item::before{left:92px; top:26px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ENTRY GATE MODAL -->
+<div id="entryGate" style="
+  position:fixed;inset:0;z-index:99999;
+  background:#1A0A00;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  font-family:'Black Han Sans',sans-serif;
+">
+  <div style="text-align:center;padding:40px;max-width:540px;">
+    <!-- Fire emoji header -->
+    <div style="font-size:3rem;margin-bottom:16px;letter-spacing:8px;">🔥 🥩 🔥</div>
+
+    <!-- Title -->
+    <div style="
+      font-size:clamp(2.2rem,8vw,4rem);
+      color:#C4955A;
+      letter-spacing:4px;
+      text-transform:uppercase;
+      line-height:1;
+      margin-bottom:8px;
+    ">MEATFEST</div>
+    <div style="
+      font-size:0.7rem;
+      letter-spacing:6px;
+      color:#9B1C1C;
+      margin-bottom:40px;
+    ">5TH ANNUAL — ACCESS SCREENING</div>
+
+    <!-- Divider -->
+    <div style="width:60px;height:2px;background:#9B1C1C;margin:0 auto 36px;"></div>
+
+    <!-- Question -->
+    <div style="
+      font-size:clamp(1rem,3.5vw,1.4rem);
+      color:#EDE5D8;
+      letter-spacing:2px;
+      line-height:1.6;
+      margin-bottom:48px;
+      text-transform:uppercase;
+    ">Are you carnivorous<br>and do you identify as male?</div>
+
+    <!-- Buttons -->
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="grantAccess()" style="
+        background:#9B1C1C;
+        border:none;
+        color:#FAFAF8;
+        font-family:'Black Han Sans',sans-serif;
+        font-size:1rem;
+        letter-spacing:4px;
+        padding:18px 48px;
+        cursor:pointer;
+        text-transform:uppercase;
+        transition:background 0.2s;
+      " onmouseover="this.style.background='#B22222'" onmouseout="this.style.background='#9B1C1C'">
+        ✔ YES
+      </button>
+      <button onclick="denyAccess()" style="
+        background:transparent;
+        border:2px solid #5C2E00;
+        color:#888070;
+        font-family:'Black Han Sans',sans-serif;
+        font-size:1rem;
+        letter-spacing:4px;
+        padding:18px 48px;
+        cursor:pointer;
+        text-transform:uppercase;
+        transition:all 0.2s;
+      " onmouseover="this.style.borderColor='#9B1C1C';this.style.color='#C4955A'" onmouseout="this.style.borderColor='#5C2E00';this.style.color='#888070'">
+        ✘ NO
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- DENIED SCREEN (hidden) -->
+<div id="deniedScreen" style="
+  position:fixed;inset:0;z-index:99999;
+  background:#1A0A00;
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;
+  font-family:'Black Han Sans',sans-serif;
+  text-align:center;
+  padding:40px;
+">
+  <div style="font-size:3rem;margin-bottom:24px;">🥦</div>
+  <div style="font-size:clamp(1.4rem,5vw,2.5rem);color:#9B1C1C;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;">Access Denied</div>
+  <div style="font-size:0.85rem;letter-spacing:3px;color:#888070;text-transform:uppercase;margin-bottom:32px;">This site is not for you.</div>
+  <button onclick="document.getElementById('deniedScreen').style.display='none';document.getElementById('entryGate').style.display='flex';" style="
+    background:transparent;border:1px solid #5C2E00;color:#5C2E00;
+    font-family:'Black Han Sans',sans-serif;font-size:0.7rem;letter-spacing:3px;
+    padding:10px 24px;cursor:pointer;text-transform:uppercase;
+  ">← GO BACK</button>
+</div>
+
+<script>
+function grantAccess() {
+  const gate = document.getElementById('entryGate');
+  gate.style.transition = 'opacity 0.8s';
+  gate.style.opacity = '0';
+  setTimeout(() => { gate.style.display = 'none'; }, 800);
+  // Start the music
+  const audio = document.getElementById('sundownAudio');
+  if (audio) {
+    audio.play().then(() => {
+      const btn = document.getElementById('musicBtn');
+      if (btn) btn.textContent = '⏸ PAUSE';
+      playing = true;
+    }).catch(() => {});
+  }
+}
+
+function denyAccess() {
+  document.getElementById('entryGate').style.display = 'none';
+  const denied = document.getElementById('deniedScreen');
+  denied.style.display = 'flex';
+}
+</script>
+
+<!-- NAV -->
+<nav>
+  <a href="#about">About</a>
+  <a href="#council">Council</a>
+  <a href="#awards">Awards</a>
+  <a href="#weighin">Weigh-In</a>
+  <a href="#schedule">Schedule</a>
+  <a href="#rules">Rules</a>
+  <a href="#game">The Game</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <video class="hero-video" autoplay muted loop playsinline src="video0.mp4"></video>
+  <div class="hero-bg-text">MEATFEST</div>
+  <div class="hero-content">
+    <div class="hero-fifth">⬥ The 5th Annual ⬥</div>
+
+    <img class="hero-logo" src="image0.jpeg" alt="Meatfest Logo" />
+
+    <div class="hero-ornament">
+      <div class="hero-ornament-line"></div>
+      <span class="hero-ornament-icon">🔥</span>
+      <span class="hero-ornament-icon">🥩</span>
+      <span class="hero-ornament-icon">🔥</span>
+      <div class="hero-ornament-line right"></div>
+    </div>
+
+    <p class="hero-desc">
+      An all-day celebration of smoke, sizzle, and self-proclaimed masculinity crowns one champion with the coveted
+      <strong>Most Valuable Carnivore (MVC)</strong> award.
+      Welcome to Meatfest. May your brisket be tender and your weigh-out triumphant.
+    </p>
+
+    <div class="hero-badges">
+      <div class="hero-badge">🥩 All Day BBQ</div>
+      <div class="hero-badge">🚬 Cheeky Cigs</div>
+      <div class="hero-badge">🍺 Cold Beer</div>
+      <div class="hero-badge">🏆 MVC Award</div>
+      <div class="hero-badge">🎯 Yard Games</div>
+      <div class="hero-badge">👑 Males Only</div>
+    </div>
+  </div>
+</section>
+
+<!-- SCROLLING BBQ STRIP -->
+<div class="bbq-divider" aria-hidden="true">
+  <div class="bbq-strip">
+    🥩&nbsp;SMOKE&nbsp;🔥&nbsp;SIZZLE&nbsp;🍖&nbsp;GRILL&nbsp;🥓&nbsp;FEAST&nbsp;🍗&nbsp;FIRE&nbsp;🌭&nbsp;MEAT&nbsp;🥩&nbsp;SMOKE&nbsp;🔥&nbsp;SIZZLE&nbsp;🍖&nbsp;GRILL&nbsp;🥓&nbsp;FEAST&nbsp;🍗&nbsp;FIRE&nbsp;🌭&nbsp;MEAT&nbsp;🥩&nbsp;SMOKE&nbsp;🔥&nbsp;SIZZLE&nbsp;🍖&nbsp;GRILL&nbsp;🥓&nbsp;FEAST&nbsp;🍗&nbsp;FIRE&nbsp;🌭&nbsp;MEAT&nbsp;🥩&nbsp;SMOKE&nbsp;🔥&nbsp;SIZZLE&nbsp;🍖&nbsp;GRILL&nbsp;🥓&nbsp;FEAST&nbsp;🍗&nbsp;FIRE&nbsp;🌭&nbsp;MEAT&nbsp;
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="s-label">What Is This</div>
+    <h2 class="s-title">Meatfest</h2>
+    <div class="s-divider"></div>
+
+    <p class="about-intro">
+      Once a year, a band of men who absolutely have their lives together convene for the most prestigious culinary event on the calendar.
+      Each man brings <strong>one unique meat dish</strong>. The grills are fired up. Yard games are played with questionable athleticism.
+      <strong>No vegetables allowed.</strong>
+    </p>
+
+    <!-- BBQ Grill SVG Graphic -->
+    <div class="bbq-scene" aria-hidden="true">
+      <!-- Grill SVG -->
+      <svg class="grill-svg" width="180" height="200" viewBox="0 0 180 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Smoke -->
+        <ellipse class="smoke-puff" cx="62" cy="35" rx="10" ry="7" fill="#888070" opacity="0.5"/>
+        <ellipse class="smoke-puff" cx="90" cy="28" rx="12" ry="8" fill="#888070" opacity="0.4"/>
+        <ellipse class="smoke-puff" cx="118" cy="35" rx="9" ry="6" fill="#888070" opacity="0.5"/>
+        <!-- Grill lid -->
+        <path d="M25 85 Q90 30 155 85 Z" fill="#2C1A0E" stroke="#5C2E00" stroke-width="3"/>
+        <path d="M25 85 Q90 38 155 85" fill="#1A0A00" stroke="#5C2E00" stroke-width="2"/>
+        <!-- Lid handle -->
+        <rect x="82" y="52" width="16" height="8" rx="4" fill="#5C2E00"/>
+        <!-- Grill body -->
+        <ellipse cx="90" cy="85" rx="65" ry="12" fill="#5C2E00"/>
+        <path d="M28 85 L42 145 L138 145 L152 85 Z" fill="#2C1A0E" stroke="#5C2E00" stroke-width="2"/>
+        <!-- Grill grates visible -->
+        <ellipse cx="90" cy="85" rx="62" ry="11" fill="#1A0A00"/>
+        <line x1="60" y1="78" x2="120" y2="78" stroke="#5C2E00" stroke-width="2" opacity="0.6"/>
+        <line x1="55" y1="83" x2="125" y2="83" stroke="#5C2E00" stroke-width="2" opacity="0.6"/>
+        <line x1="60" y1="88" x2="120" y2="88" stroke="#5C2E00" stroke-width="2" opacity="0.6"/>
+        <!-- Meat on grill -->
+        <ellipse cx="75" cy="80" rx="18" ry="9" fill="#9B1C1C" opacity="0.9"/>
+        <ellipse cx="108" cy="78" rx="15" ry="8" fill="#8B4513" opacity="0.9"/>
+        <!-- Grill legs -->
+        <line x1="55" y1="145" x2="42" y2="192" stroke="#5C2E00" stroke-width="6" stroke-linecap="round"/>
+        <line x1="125" y1="145" x2="138" y2="192" stroke="#5C2E00" stroke-width="6" stroke-linecap="round"/>
+        <line x1="90" y1="145" x2="90" y2="185" stroke="#5C2E00" stroke-width="5" stroke-linecap="round"/>
+        <!-- Leg crossbar -->
+        <line x1="48" y1="172" x2="132" y2="172" stroke="#5C2E00" stroke-width="4" stroke-linecap="round"/>
+        <!-- Ember glow -->
+        <ellipse cx="90" cy="142" rx="40" ry="6" fill="#9B1C1C" opacity="0.3"/>
+      </svg>
+
+      <!-- Tongs SVG -->
+      <svg width="60" height="160" viewBox="0 0 60 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="26" y="0" width="8" height="90" rx="4" fill="#5C2E00"/>
+        <rect x="26" y="0" width="4" height="90" rx="2" fill="#8B5E3C" opacity="0.4"/>
+        <!-- pivot -->
+        <circle cx="30" cy="88" r="7" fill="#2C1A0E" stroke="#5C2E00" stroke-width="2"/>
+        <!-- arms -->
+        <path d="M30 88 Q12 105 8 140" stroke="#5C2E00" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M30 88 Q48 105 52 140" stroke="#5C2E00" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <!-- grippers -->
+        <ellipse cx="10" cy="143" rx="9" ry="5" fill="#2C1A0E" stroke="#9B1C1C" stroke-width="2"/>
+        <ellipse cx="50" cy="143" rx="9" ry="5" fill="#2C1A0E" stroke="#9B1C1C" stroke-width="2"/>
+      </svg>
+
+      <!-- Fire SVG -->
+      <svg width="80" height="140" viewBox="0 0 80 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g class="flame-anim">
+          <path d="M40 10 C40 10 20 35 20 60 C20 80 32 95 40 100 C48 95 60 80 60 60 C60 35 40 10 40 10Z" fill="#9B1C1C" opacity="0.9"/>
+          <path d="M40 30 C40 30 27 50 27 67 C27 80 33 90 40 95 C47 90 53 80 53 67 C53 50 40 30 40 30Z" fill="#B22222" opacity="0.85"/>
+          <path d="M40 48 C40 48 33 60 33 72 C33 81 36 88 40 92 C44 88 47 81 47 72 C47 60 40 48 40 48Z" fill="#FF6B00" opacity="0.8"/>
+          <path d="M40 60 C40 60 36 68 36 75 C36 82 38 87 40 90 C42 87 44 82 44 75 C44 68 40 60 40 60Z" fill="#FFD700" opacity="0.7"/>
+        </g>
+        <!-- log base -->
+        <ellipse cx="40" cy="125" rx="32" ry="10" fill="#5C2E00"/>
+        <rect x="12" y="115" width="56" height="15" rx="5" fill="#5C2E00"/>
+        <line x1="18" y1="118" x2="62" y2="128" stroke="#2C1A0E" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+        <line x1="18" y1="124" x2="62" y2="118" stroke="#2C1A0E" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+      </svg>
+
+      <!-- Beer mug SVG -->
+      <svg width="70" height="150" viewBox="0 0 70 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- foam -->
+        <ellipse cx="28" cy="32" rx="24" ry="10" fill="white" opacity="0.9"/>
+        <ellipse cx="16" cy="28" rx="10" ry="8" fill="white" opacity="0.9"/>
+        <ellipse cx="38" cy="26" rx="12" ry="9" fill="white" opacity="0.9"/>
+        <!-- mug body -->
+        <path d="M8 38 L14 138 L44 138 L50 38 Z" fill="#C4955A"/>
+        <path d="M8 38 L50 38" stroke="#D4A870" stroke-width="2"/>
+        <!-- beer color overlay -->
+        <path d="M10 48 L15 135 L43 135 L48 48 Z" fill="#D4781C" opacity="0.7"/>
+        <!-- handle -->
+        <path d="M50 55 Q68 55 68 85 Q68 115 50 115" stroke="#C4955A" stroke-width="10" stroke-linecap="round" fill="none"/>
+        <!-- shine -->
+        <line x1="18" y1="50" x2="22" y2="130" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.25"/>
+      </svg>
+    </div>
+
+    <div class="about-grid" style="margin-top:40px;">
+      <div class="about-card">
+        <span class="about-card-icon">🚬</span>
+        <h3>Cheeky Cigarettes</h3>
+        <p>Nobody here smokes. Except at Meatfest, where everybody smokes. Cheeky cigs are passed around freely throughout the day. No judgment. No questions. Just smoke.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon">🥩</span>
+        <h3>One Dish Per Man</h3>
+        <p>Every attendee brings a unique meat preparation. No repeats. No duplicates. Absolutely no salad.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon">🔥</span>
+        <h3>All Day Fire</h3>
+        <p>Grills lit at dawn. They don't go cold until the last man is weighed and either crowned or shamed.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon">🍺</span>
+        <h3>Cold Beer</h3>
+        <p>Consumed freely and in volume. Bring your own. The cooler is common ground. The brotherhood is real.</p>
+      </div>
+      <div class="about-card">
+        <span class="about-card-icon">🎯</span>
+        <h3>Yard Games</h3>
+        <p>Cornhole, horseshoes, and other activities that let men pretend athleticism is still something they have.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCROLLING STRIP 2 -->
+<div class="bbq-divider" aria-hidden="true">
+  <div class="bbq-strip" style="animation-direction:reverse; animation-duration:22s;">
+    🏆&nbsp;CHAMPION&nbsp;⚖&nbsp;WEIGH-OUT&nbsp;👑&nbsp;MVC&nbsp;🔥&nbsp;GLORY&nbsp;🥩&nbsp;HONOR&nbsp;🍖&nbsp;LEGEND&nbsp;🏆&nbsp;CHAMPION&nbsp;⚖&nbsp;WEIGH-OUT&nbsp;👑&nbsp;MVC&nbsp;🔥&nbsp;GLORY&nbsp;🥩&nbsp;HONOR&nbsp;🍖&nbsp;LEGEND&nbsp;🏆&nbsp;CHAMPION&nbsp;⚖&nbsp;WEIGH-OUT&nbsp;👑&nbsp;MVC&nbsp;🔥&nbsp;GLORY&nbsp;🥩&nbsp;HONOR&nbsp;🍖&nbsp;LEGEND&nbsp;
+  </div>
+</div>
+
+<!-- COUNCIL -->
+<section class="council" id="council">
+  <div class="container">
+    <div class="s-label">Governance & Power</div>
+    <h2 class="s-title">The Meat Council</h2>
+    <div class="s-divider"></div>
+
+    <!-- Council crest SVG -->
+    <div class="council-header-graphic">
+      <svg width="120" height="100" viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="60,5 115,30 115,70 60,95 5,70 5,30" fill="none" stroke="#9B1C1C" stroke-width="2" opacity="0.5"/>
+        <polygon points="60,15 105,35 105,65 60,85 15,65 15,35" fill="none" stroke="#C4955A" stroke-width="1" opacity="0.4"/>
+        <text x="60" y="42" text-anchor="middle" font-family="'Black Han Sans',sans-serif" font-size="10" fill="#C4955A" letter-spacing="2">MEAT</text>
+        <text x="60" y="58" text-anchor="middle" font-family="'Black Han Sans',sans-serif" font-size="10" fill="#C4955A" letter-spacing="2">COUNCIL</text>
+        <line x1="30" y1="50" x2="90" y2="50" stroke="#9B1C1C" stroke-width="1" opacity="0.4"/>
+      </svg>
+    </div>
+
+
+    <div class="council-photo-wrap">
+      <img class="council-photo" src="image1.jpeg" alt="The Meat Council" />
+      <div class="council-photo-caption">⬥ The Meat Council — In Their Natural Habitat ⬥</div>
+    </div>
+    <div class="council-grid">
+      <div class="councilman">
+        <div class="c-avatar">🔨</div>
+        <div class="c-name">Kevin Gassaway</div>
+        <div class="c-title">High Councillor of the Flame</div>
+      </div>
+      <div class="councilman">
+        <div class="c-avatar">⚖️</div>
+        <div class="c-name">Andrew Kern</div>
+        <div class="c-title">Grand Arbiter of Cuts</div>
+      </div>
+      <div class="councilman">
+        <div class="c-avatar">📜</div>
+        <div class="c-name">Colin Miler</div>
+        <div class="c-title">Keeper of the Sacred Rubs</div>
+      </div>
+      <div class="councilman">
+        <div class="c-avatar">🗡️</div>
+        <div class="c-name">Keaghan Dunn-Rhodes</div>
+        <div class="c-title">Master of Ceremonial Tongs</div>
+      </div>
+      <div class="councilman">
+        <div class="c-avatar">🏆</div>
+        <div class="c-name">Kevin Niemeyer</div>
+        <div class="c-title">Chief Steward of the MVC</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section class="awards" id="awards">
+  <div class="container">
+    <div class="s-label">Honors & Distinction</div>
+    <h2 class="s-title">Awards of the Day</h2>
+    <div class="s-divider"></div>
+
+    <div class="mvc-block">
+      <div class="mvc-badge-circle">
+        <div class="mvc-trophy-icon">🏆</div>
+        <div class="mvc-badge-text">M V C</div>
+      </div>
+      <div>
+        <div class="mvc-eyebrow">⬥ The Highest Honor ⬥ Most Coveted Title ⬥</div>
+        <div class="mvc-title-text">Most Valuable Carnivore</div>
+        <p class="mvc-desc">
+          Every attendee is weighed upon arrival and again at departure. The man who gains the most weight through sheer, undeniable meat consumption is crowned the <strong>Most Valuable Carnivore</strong>. The trophy is heavy. So is the winner. The title is eternal.
+        </p>
+      </div>
+    </div>
+
+    <div class="awards-grid">
+      <div class="award-card">
+        <span class="award-icon-big">🥇</span>
+        <div class="award-name">Best Meat</div>
+        <p class="award-desc">Voted on by the brotherhood. The meat that made grown men emotional and question their own cooking abilities.</p>
+      </div>
+      <div class="award-card">
+        <span class="award-icon-big">🌶️</span>
+        <div class="award-name">Most Audacious Prep</div>
+        <p class="award-desc">For the man who took the biggest culinary risk. Win or lose — respect the audacity. The Council salutes you.</p>
+      </div>
+      <div class="award-card">
+        <span class="award-icon-big">🫀</span>
+        <div class="award-name">Iron Stomach</div>
+        <p class="award-desc">Awarded to the man who sampled every dish without complaint, hesitation, or medical incident.</p>
+      </div>
+      <div class="award-card">
+        <span class="award-icon-big">🎯</span>
+        <div class="award-name">Meat Trials Champion</div>
+        <p class="award-desc">Glory through cornhole. Crowned after the tournament. A man of coordination and inexplicable confidence.</p>
+      </div>
+      <div class="award-card">
+        <span class="award-icon-big">🐐</span>
+        <div class="award-name">Grillmaster GOAT</div>
+        <p class="award-desc">Perfect execution at the grill. Technique. Timing. Confidence. The complete package in a set of tongs.</p>
+      </div>
+      <div class="award-card">
+        <span class="award-icon-big">😐</span>
+        <div class="award-name">Most Aggressively Mid</div>
+        <p class="award-desc">A participation trophy for the man who tried genuinely hard and landed squarely in average. We see you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEIGH IN -->
+<section class="weighin" id="weighin">
+  <div class="container">
+    <div class="s-label">Official Protocol</div>
+    <h2 class="s-title">The Weigh-In System</h2>
+    <div class="s-divider"></div>
+
+    <div class="weighin-steps">
+      <div class="w-step">
+        <div class="w-step-num">01</div>
+        <span class="w-step-icon">🚪</span>
+        <div class="w-step-title">Arrival</div>
+        <p>Step on the official Meatfest scale. Weight recorded by a Councillor in the Meatfest Ledger. No shoes. No excuses.</p>
+      </div>
+      <div class="w-arrow">→</div>
+      <div class="w-step">
+        <div class="w-step-num">02</div>
+        <span class="w-step-icon">🥩</span>
+        <div class="w-step-title">The Feast</div>
+        <p>Eat. Drink. Compete. Do what you came here to do. The MVC does not go to the timid or the polite.</p>
+      </div>
+      <div class="w-arrow">→</div>
+      <div class="w-step">
+        <div class="w-step-num">03</div>
+        <span class="w-step-icon">🏆</span>
+        <div class="w-step-title">Departure</div>
+        <p>Step on the scale again. The delta is calculated to the ounce. The greatest gainer is crowned MVC forever.</p>
+      </div>
+    </div>
+
+    <p class="weighin-note">The Meat Council assumes no medical responsibility for the pursuit of the MVC award. Consult your physician. Or don't. It's Meatfest.</p>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="schedule" id="schedule">
+  <div class="container">
+    <div class="s-label">Day Of</div>
+    <h2 class="s-title">The Schedule</h2>
+    <div class="s-divider"></div>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-time">1:00 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🚪</span>Gates Open & Official Weigh-In</h4>
+          <p>Arrive. Step on the scale. Your starting weight is recorded in the Meatfest Ledger by a Councillor. Then crack a beer. The day has begun.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">1:30 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🔥</span>The Fires Are Lit</h4>
+          <p>The Council ceremonially ignites the first grill. The smell of smoke, char, and raw potential fills the yard. Men stand around it doing nothing helpful.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">2:00 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🍝</span>Bobbing for Meatballs</h4>
+          <p>A time-honored competition of speed, commitment, and questionable hygiene. No hands. Face first. The winner earns eternal bragging rights and a towel. The losers earn nothing but wet faces and the memory of trying.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">3:00 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">⚔️</span>The Meat Trials</h4>
+          <p>Every man presents his dish before the Council and the brotherhood. Dishes are tasted, judged, and debated with the seriousness of a war tribunal. The MVC race is officially on. May the heaviest man win.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">4:00 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🎯</span>Yard Games</h4>
+          <p>The cornhole bracket commences. Horseshoes follow. Competitive spirits emerge despite the significant physical limitations introduced by three hours of meat consumption.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">4:45 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">💥</span>Smash Zone</h4>
+          <p>Enter the Smash Zone. What happens here is governed by the Council and described to no one outside of it. All we can say is that it is loud, it is physical, and someone always leaves with a story they will tell for years.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">5:00 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🐦</span>Quail Wrangling</h4>
+          <p>The event that defies explanation and demands participation. One man wrangles. The rest watch. Rules are unclear. Scoring is disputed. The Council's judgment is final and also somewhat arbitrary. Legends are made here.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">5:30 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🏅</span>Awards Ceremony — Part I</h4>
+          <p>Best Meat, Most Audacious Preparation, Iron Stomach, Meat Trials Champion, Grillmaster GOAT, and Most Aggressively Mid — bestowed by decree of the Council.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">7:00 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🪔</span>The Lighting of the Meat Torches</h4>
+          <p>As darkness falls, the sacred Meat Torches are placed around the yard and lit in a solemn ceremony presided over by the full Council. The yard glows. The night begins. No one fully understands the tradition but everyone agrees it rules.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">8:00 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🌙</span>Night Session Begins</h4>
+          <p>The torches burn. The beers are cold. The stories get better and less accurate. A second wind of eating is encouraged in the name of MVC glory.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">10:00 PM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🎶</span>Late Night Yard Games</h4>
+          <p>Glow-in-the-dark cornhole. Torch-lit horseshoes. Events that seemed like a good idea at 10 PM and will absolutely seem like a great idea at midnight.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">3:00 AM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🥩</span>Steaks on the Fire</h4>
+          <p>The most legendary moment of the night. The last survivors gather around the open fire. Raw steaks go directly on the coals. No grates. No rules. No mercy. This is what Meatfest was always building toward. The smoke reaches heaven itself.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">All Day</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🍺</span>Beer. Always Beer.</h4>
+          <p>Continuous, uninterrupted consumption from gates open to final weigh-out. This needs no further elaboration.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-time">All Day</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🚬</span>Cheeky Cigarettes</h4>
+          <p>Nobody here smokes. Except today. Cigs circulate freely and without shame throughout the entire day. A Meatfest tradition as sacred as the MVC itself. You don't have to. But you probably will.</p>
+        </div>
+      </div>
+
+      <div class="tl-item" style="border-bottom:none;">
+        <div class="tl-time">4:00 AM</div>
+        <div class="tl-content">
+          <h4><span class="tl-icon">🏆</span>Final Weigh-Out & MVC Crowning</h4>
+          <p>The final, sacred ritual. Every man steps on the scale one last time. The greatest gainer — bloated with pride and protein — is crowned the Most Valuable Carnivore. The title is eternal. The man is full.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- RULES -->
+<section class="rules" id="rules">
+  <div class="container">
+    <div class="s-label">Binding Law</div>
+    <h2 class="s-title">The Sacred Laws</h2>
+    <div class="s-divider"></div>
+    <div class="rules-grid">
+      <div class="rule-card"><div class="rule-num">I</div><p class="rule-text">Every man must bring one unique meat dish. No duplicate proteins. The Council resolves all disputes. By decree.</p></div>
+      <div class="rule-card"><div class="rule-num">II</div><p class="rule-text">Vegetables may appear as garnish only. They shall not be celebrated, featured, or discussed at any time.</p></div>
+      <div class="rule-card"><div class="rule-num">III</div><p class="rule-text">All attendees must be weighed upon arrival. No shoes. No extra clothing. No negotiating with the Council.</p></div>
+      <div class="rule-card"><div class="rule-num">IV</div><p class="rule-text">The MVC is determined by weight gained through meat consumption. The honor system is in full effect.</p></div>
+      <div class="rule-card"><div class="rule-num">V</div><p class="rule-text">Council decisions are final. Appeals may be submitted and will be received with silence and mild contempt.</p></div>
+      <div class="rule-card"><div class="rule-num">VI</div><p class="rule-text">Every man brings his own beer. The cooler is communal. The brotherhood is real. Do not show up empty-handed.</p></div>
+      <div class="rule-card"><div class="rule-num">VII</div><p class="rule-text">Yard game trash talk is not only permitted but expected. Do not take it personally. Do take it seriously.</p></div>
+      <div class="rule-card"><div class="rule-num">VIII</div><p class="rule-text">What happens at Meatfest stays at Meatfest. Except the MVC title. That gets announced to everyone, forever.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GAME -->
+<section class="game-section" id="game">
+  <div class="container">
+    <div class="s-label">Official Training Simulator</div>
+    <h2 class="s-title">Meat Man's Backyard Blitz</h2>
+    <div class="s-divider"></div>
+
+
+    <!-- Mascot photo -->
+    <div class="mascot-block">
+      <img class="mascot-img" src="image2.jpeg" alt="The Official Meatfest Mascot" />
+      <div class="mascot-text">
+        <div class="mascot-label">⬥ The Official Mascot ⬥</div>
+        <div class="mascot-title">The <span>Meat</span> Man</div>
+        <p class="mascot-desc">
+          Yellow speedo. Lit tiki torch. Inflatable pool in the background. This is not a man who stumbled into greatness — this is a man who <strong>planned for it</strong>.<br><br>
+          He is the inspiration. He is the legend. He is the reason we built the game. May he run forever through the backyard of our hearts.
+        </p>
+      </div>
+    </div>
+    <br>
+    <div class="game-hud">
+      <div class="hud-cell"><div class="hud-label">Meat Eaten</div><div class="hud-val" id="statMeat">0</div></div>
+      <div class="hud-cell"><div class="hud-label">Torches Lit</div><div class="hud-val" id="statTorches">0</div></div>
+      <div class="hud-cell"><div class="hud-label">Score</div><div class="hud-val" id="statScore">0</div></div>
+      <div class="hud-cell"><div class="hud-label">Time</div><div class="hud-val" id="statTime">60</div></div>
+    </div>
+
+    <canvas id="gameCanvas" width="800" height="480"></canvas>
+
+    <div class="game-btns">
+      <button class="gbtn" id="startBtn" onclick="startGame()">🔥 Start Game</button>
+      <button class="gbtn outline" onclick="resetGame()">Reset</button>
+    </div>
+    <p class="game-help">
+      <span>Arrow Keys / WASD</span> to move &nbsp;·&nbsp;
+      Run over meat to eat it &nbsp;·&nbsp;
+      Touch tiki torches to light them &nbsp;·&nbsp;
+      Light all torches before time runs out
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="image3.jpeg" alt="Meatfest Logo" />
+  <div class="f-title">MEATFEST</div>
+  <p>The 5th Annual &nbsp;·&nbsp; Organized by the Meat Council &nbsp;·&nbsp; A Brotherhood of Flame & Protein</p>
+  <p style="margin-top:10px;">🥩 &nbsp; 🔥 &nbsp; 🍺 &nbsp; 🏆 &nbsp; 🥩</p>
+  <p style="margin-top:16px; font-size:0.75rem;">The Meat Council assumes no liability for events resulting from the pursuit of the MVC award.</p>
+</footer>
+
+<script>
+/* ─── GAME ─── */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let gs = 'idle', score=0, meatEaten=0, torchesLit=0, timeLeft=60;
+let tInt=null, af=null;
+const pl = {x:400,y:240,speed:3.2,facing:1,step:0};
+const keys={};
+document.addEventListener('keydown',e=>{keys[e.key]=true;if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))e.preventDefault();});
+document.addEventListener('keyup',e=>{keys[e.key]=false;});
+
+let meats=[],torches=[],particles=[];
+const meatEmoji=['🥩','🍗','🌭','🥓','🍖'];
+
+function spawnMeats(){
+  meats=[];
+  for(let i=0;i<8;i++) meats.push({x:80+Math.random()*640,y:60+Math.random()*360,e:meatEmoji[Math.floor(Math.random()*5)],b:Math.random()*Math.PI*2});
+}
+function spawnTorches(){
+  torches=[{x:60,y:60},{x:740,y:60},{x:60,y:420},{x:740,y:420},{x:400,y:50},{x:400,y:430}].map(p=>({...p,lit:false}));
+}
+function particle(x,y,t){particles.push({x,y,t,life:1,vy:-1.5});}
+
+function startGame(){
+  gs='running'; score=meatEaten=torchesLit=0; timeLeft=60;
+  pl.x=400;pl.y=240;pl.step=0; particles=[];
+  spawnMeats();spawnTorches();updateHUD();
+  clearInterval(tInt);
+  tInt=setInterval(()=>{if(gs!=='running')return;timeLeft--;document.getElementById('statTime').textContent=timeLeft;if(timeLeft<=0)endGame();},1000);
+  if(af)cancelAnimationFrame(af);
+  gameLoop();
+  document.getElementById('startBtn').textContent='Running...';
+}
+function resetGame(){
+  gs='idle';clearInterval(tInt);if(af)cancelAnimationFrame(af);
+  score=meatEaten=torchesLit=0;timeLeft=60;
+  pl.x=400;pl.y=240;meats=[];torches=[];particles=[];
+  updateHUD();document.getElementById('statTime').textContent='60';
+  document.getElementById('startBtn').textContent='🔥 Start Game';
+  drawIdle();
+}
+function endGame(){gs='over';clearInterval(tInt);}
+function updateHUD(){
+  document.getElementById('statMeat').textContent=meatEaten;
+  document.getElementById('statTorches').textContent=torchesLit;
+  document.getElementById('statScore').textContent=score;
+}
+
+function gameLoop(){
+  if(gs!=='running'){if(gs==='over')drawOver();return;}
+  let dx=0,dy=0;
+  if(keys['ArrowLeft']||keys['a']||keys['A'])dx=-1;
+  if(keys['ArrowRight']||keys['d']||keys['D'])dx=1;
+  if(keys['ArrowUp']||keys['w']||keys['W'])dy=-1;
+  if(keys['ArrowDown']||keys['s']||keys['S'])dy=1;
+  if(dx||dy){const l=Math.sqrt(dx*dx+dy*dy);pl.x+=(dx/l)*pl.speed;pl.y+=(dy/l)*pl.speed;if(dx)pl.facing=dx;pl.step+=0.2;}
+  pl.x=Math.max(20,Math.min(780,pl.x));pl.y=Math.max(20,Math.min(460,pl.y));
+
+  meats=meats.filter(m=>{
+    if(Math.hypot(pl.x-m.x,pl.y-m.y)<30){meatEaten++;score+=10;particle(m.x,m.y-10,'+10');updateHUD();
+      if(!meats.filter(x=>x!==m).length)setTimeout(()=>{if(gs==='running')spawnMeats();},500);return false;}
+    m.b+=0.05;return true;
+  });
+  torches.forEach(t=>{if(!t.lit&&Math.hypot(pl.x-t.x,pl.y-t.y)<32){t.lit=true;torchesLit++;score+=25;particle(t.x,t.y-20,'+25');updateHUD();}});
+  particles=particles.filter(p=>{p.y+=p.vy;p.life-=0.022;return p.life>0;});
+  if(torches.length&&torches.every(t=>t.lit)&&!meats.length){score+=timeLeft*2;updateHUD();endGame();}
+  draw();af=requestAnimationFrame(gameLoop);
+}
+
+function drawBG(){
+  // grass
+  ctx.fillStyle='#1e3d1e';ctx.fillRect(0,0,800,480);
+  for(let x=0;x<800;x+=24)for(let y=0;y<480;y+=24){
+    const v=Math.sin(x*0.22)*Math.cos(y*0.22)*10;
+    ctx.fillStyle=`rgb(${26+v|0},${64+v|0},${26+v|0})`;ctx.fillRect(x,y,24,24);
+  }
+  // fence
+  ctx.fillStyle='#5C2E00';ctx.fillRect(0,0,800,10);ctx.fillRect(0,470,800,10);ctx.fillRect(0,0,10,480);ctx.fillRect(790,0,10,480);
+  ctx.strokeStyle='#8B5E3C';ctx.lineWidth=2;ctx.strokeRect(12,12,776,456);
+  // fence posts
+  for(let x=30;x<790;x+=50){ctx.fillStyle='#5C2E00';ctx.fillRect(x-4,0,8,14);ctx.fillRect(x-4,466,8,14);}
+  for(let y=30;y<470;y+=50){ctx.fillStyle='#5C2E00';ctx.fillRect(0,y-4,14,8);ctx.fillRect(786,y-4,14,8);}
+}
+
+function drawTorch(t){
+  ctx.save();ctx.translate(t.x,t.y);
+  ctx.fillStyle='#5C2E00';ctx.fillRect(-3,-34,6,40);
+  ctx.fillStyle=t.lit?'#7B4423':'#9B6633';ctx.fillRect(-8,-34,16,12);
+  if(t.lit){
+    const f=Math.sin(Date.now()*0.013)*3;
+    ctx.fillStyle='rgba(155,28,28,0.9)';
+    ctx.beginPath();ctx.moveTo(-7,-34);ctx.quadraticCurveTo(-3+f,-50,0,-56-f);ctx.quadraticCurveTo(3-f,-50,7,-34);ctx.closePath();ctx.fill();
+    ctx.fillStyle='rgba(255,120,0,0.75)';
+    ctx.beginPath();ctx.moveTo(-4,-34);ctx.quadraticCurveTo(f,-45,0,-50-f/2);ctx.quadraticCurveTo(3-f,-45,4,-34);ctx.closePath();ctx.fill();
+    ctx.fillStyle='rgba(255,220,50,0.6)';
+    ctx.beginPath();ctx.moveTo(-2,-34);ctx.quadraticCurveTo(f/2,-41,0,-45-f/3);ctx.quadraticCurveTo(2-f/2,-41,2,-34);ctx.closePath();ctx.fill();
+    const g=ctx.createRadialGradient(0,-40,2,0,-40,30);
+    g.addColorStop(0,'rgba(200,80,0,0.3)');g.addColorStop(1,'transparent');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,-40,30,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawPlayer(){
+  const {x,y,facing,step}=pl;
+  ctx.save();ctx.translate(x,y);
+  // shadow
+  ctx.fillStyle='rgba(0,0,0,0.3)';ctx.beginPath();ctx.ellipse(0,20,16,5,0,0,Math.PI*2);ctx.fill();
+  const w=Math.sin(step)*6;
+  // legs skin
+  ctx.fillStyle='#F0C080';
+  ctx.fillRect(-8*facing,10,7,16+(facing>0?w:-w));
+  ctx.fillRect(facing,10,7,16+(facing>0?-w:w));
+  // speedo (crimson/red to match theme)
+  ctx.fillStyle='#9B1C1C';ctx.fillRect(-10,8,20,10);
+  ctx.fillStyle='#FFD700';ctx.fillRect(-10,8,20,3); // gold stripe
+  // body
+  ctx.fillStyle='#F0C080';ctx.fillRect(-10,-12,20,22);
+  // arms
+  const as=Math.sin(step)*7;
+  ctx.fillRect(-16,-10,7,14+as*facing);ctx.fillRect(9,-10,7,14-as*facing);
+  // head
+  ctx.beginPath();ctx.ellipse(0,-18,11,12,0,0,Math.PI*2);ctx.fill();
+  // eyes
+  ctx.fillStyle='#2C1A0E';ctx.beginPath();ctx.arc(3*facing,-19,2.5,0,Math.PI*2);ctx.fill();
+  // smile
+  ctx.strokeStyle='#5C2E00';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,-14,5,0,Math.PI);ctx.stroke();
+  // hair
+  ctx.fillStyle='#3A1A00';ctx.beginPath();ctx.ellipse(0,-28,10,6,0,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+
+function draw(){
+  drawBG();
+  torches.forEach(drawTorch);
+  meats.forEach(m=>{
+    ctx.save();ctx.translate(m.x,m.y+Math.sin(m.b)*3);
+    ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(m.e,0,0);ctx.restore();
+  });
+  drawPlayer();
+  ctx.textAlign='center';
+  particles.forEach(p=>{
+    ctx.globalAlpha=p.life;
+    ctx.font='bold 16px "Black Han Sans",sans-serif';
+    ctx.fillStyle='#FFD700';ctx.fillText(p.t,p.x,p.y);
+  });
+  ctx.globalAlpha=1;
+  // HUD bar
+  ctx.fillStyle='rgba(26,10,0,0.75)';ctx.fillRect(0,0,800,34);
+  ctx.fillStyle='rgba(155,28,28,1)';ctx.fillRect(0,30,800,4);
+  ctx.font='bold 14px "Black Han Sans",sans-serif';
+  ctx.fillStyle='#C4955A';ctx.textAlign='left';ctx.fillText(`MEAT  ${meatEaten}`,14,22);
+  ctx.textAlign='center';ctx.fillText(`🔥 TORCHES  ${torchesLit} / ${torches.length}`,400,22);
+  ctx.textAlign='right';ctx.fillText(`⏱  ${timeLeft}s`,786,22);
+}
+
+function drawIdle(){
+  drawBG();
+  ctx.fillStyle='rgba(26,10,0,0.65)';ctx.fillRect(0,0,800,480);
+  ctx.textAlign='center';
+  ctx.font='bold 40px "Black Han Sans",sans-serif';
+  ctx.fillStyle='#FAFAF8';ctx.fillText("MEAT MAN'S BACKYARD BLITZ",400,200);
+  ctx.font='bold 18px "Black Han Sans",sans-serif';
+  ctx.fillStyle='#C4955A';ctx.fillText('PRESS START GAME TO BEGIN',400,248);
+  ctx.font='italic 700 15px "Barlow Condensed",sans-serif';
+  ctx.fillStyle='rgba(196,149,90,0.5)';ctx.fillText('Eat meat. Light torches. Pursue glory.',400,285);
+}
+
+function drawOver(){
+  draw();
+  ctx.fillStyle='rgba(26,10,0,0.78)';ctx.fillRect(0,0,800,480);
+  const won=torches.length&&torches.every(t=>t.lit);
+  ctx.textAlign='center';
+  ctx.font='bold 52px "Black Han Sans",sans-serif';
+  ctx.fillStyle=won?'#C4955A':'#FAFAF8';
+  ctx.fillText(won?'CHAMPION':'TIME\'S UP',400,185);
+  ctx.font='bold 26px "Black Han Sans",sans-serif';
+  ctx.fillStyle='#FAFAF8';ctx.fillText(`FINAL SCORE  ${score}`,400,238);
+  ctx.font='bold 700 17px "Barlow Condensed",sans-serif';
+  ctx.fillStyle='#C4955A';
+  ctx.fillText(`Meat: ${meatEaten}  ·  Torches: ${torchesLit}/${torches.length}`,400,272);
+  const v=score>200?'MVC CANDIDATE.':score>100?'RESPECTABLE.':'THE COUNCIL IS DISAPPOINTED.';
+  ctx.font='italic 700 20px "Barlow Condensed",sans-serif';
+  ctx.fillStyle='rgba(196,149,90,0.6)';ctx.fillText(v,400,312);
+  ctx.font='bold 13px "Black Han Sans",sans-serif';
+  ctx.fillStyle='rgba(196,149,90,0.35)';ctx.fillText('PRESS RESET TO PLAY AGAIN',400,360);
+}
+
+drawIdle();
+</script>
+<!-- Music Player -->
+<audio id="sundownAudio" loop src="audio0.mpeg"></audio>
+
+<div id="musicPlayer" style="position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--dark);border:2px solid var(--red);padding:12px 16px;display:flex;align-items:center;gap:12px;font-family:'Black Han Sans',sans-serif;font-size:0.7rem;letter-spacing:2px;color:var(--tan);box-shadow:0 4px 20px rgba(0,0,0,0.6);">
+  <span>🎵</span>
+  <span>SUNDOWN — GORDON LIGHTFOOT</span>
+  <button onclick="toggleMusic()" id="musicBtn" style="background:var(--red);border:none;color:white;font-family:'Black Han Sans',sans-serif;font-size:0.65rem;letter-spacing:2px;padding:7px 14px;cursor:pointer;">▶ PLAY</button>
+  <button onclick="document.getElementById('musicPlayer').style.display='none';document.getElementById('sundownAudio').pause();" style="background:transparent;border:1px solid rgba(196,149,90,0.3);color:var(--tan);font-family:'Black Han Sans',sans-serif;font-size:0.65rem;padding:7px 10px;cursor:pointer;">✕</button>
+</div>
+
+<script>
+let playing = false;
+const audio = document.getElementById('sundownAudio');
+
+function toggleMusic() {
+  const btn = document.getElementById('musicBtn');
+  if (!playing) {
+    audio.play();
+    btn.textContent = '⏸ PAUSE';
+    playing = true;
+  } else {
+    audio.pause();
+    btn.textContent = '▶ PLAY';
+    playing = false;
+  }
+}
+
+// Music starts via the entry gate YES button
+</script>
+</body>
+</html>
